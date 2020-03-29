@@ -54,39 +54,7 @@ public class Main {
                 return oneNumberCorrectInRightLocation;
             }
         }
-
         return 0;
-
-
-//        int tempNum = computerNumber;
-//        int[] digitsTempNum = new int[10];
-//
-//        while (tempNum != 0) {
-//            int digit = tempNum % 10;
-//            digitsTempNum[digit]++;
-//            tempNum /= 10;
-//        }
-//
-//        int[] digitsOneNumberCorrectInRightLocation = new int[10];
-//
-//        while (oneNumberCorrectInRightLocation != 0) {
-//            int digit = oneNumberCorrectInRightLocation % 10;
-//            digitsOneNumberCorrectInRightLocation[digit]++;
-//            oneNumberCorrectInRightLocation /= 10;
-//        }
-//        int checkLocation = 0;
-//        while (checkLocation != 1) {
-//            for (int i = 0; i < digitsTempNum.length; i++) {
-//                if (digitsTempNum[i] == digitsOneNumberCorrectInRightLocation[i]) {
-//                    checkLocation++;
-//                }
-//            }
-//            if (checkLocation != 1) {
-//
-//            }
-//        }
-//
-//        return oneNumberCorrectInRightLocation;
     }
 
     private static int getNumbersNotExist(int computerNumber) {
