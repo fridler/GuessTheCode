@@ -9,11 +9,56 @@ public class Main {
         int computerNumber = generateComputerNumber();
         int numbersNotExist = getNumbersNotExist(computerNumber);
         int oneNumberCorrectInRightLocation = getOneNumberCorrectInRightLocation(computerNumber);
+        int oneNumberCorrectAtWrongLocation = getOneNumberCorrectAtWrongLocation(computerNumber);
 
         // test
-        System.out.println(computerNumber);
-        System.out.println(numbersNotExist);
-        System.out.println(oneNumberCorrectInRightLocation);
+        System.out.println("The number generated: " + computerNumber);
+        System.out.println("No number exists: " + numbersNotExist);
+        System.out.println("One number correct and in the right location: " + oneNumberCorrectInRightLocation);
+        System.out.println("One number correct and wrong location: " + oneNumberCorrectAtWrongLocation);
+    }
+
+    private static int getOneNumberCorrectAtWrongLocation(int computerNumber) {
+        int oneLocationWrong = 0;
+        while (oneLocationWrong != 1) {
+
+            oneLocationWrong = 0;
+            int oneNumberCorrectWrongLocation = generateComputerNumber();
+            int tempComputerNumber = computerNumber;
+
+
+            int[] oneNumberCorrectWrongLocationArray = new int[3];
+            int[] tempComputerNumberArray = new int[3];
+
+            for (int i = 0; i < oneNumberCorrectWrongLocationArray.length; i++) {
+                int digit = oneNumberCorrectWrongLocation % 10;
+                oneNumberCorrectWrongLocationArray[i] = digit;
+                oneNumberCorrectWrongLocation /= 10;
+            }
+
+            for (int i = 0; i < tempComputerNumberArray.length; i++) {
+                int digit = tempComputerNumber % 10;
+                tempComputerNumberArray[i] = digit;
+                tempComputerNumber /= 10;
+            }
+
+            for (int i = 0; i < oneNumberCorrectWrongLocationArray.length; i++) {
+                for (int j = 0; j < tempComputerNumberArray.length; j++) {
+                    if (oneNumberCorrectWrongLocationArray[i] == tempComputerNumberArray[j] && i != j) {
+                        oneLocationWrong++;
+                    }
+                }
+
+            }
+            if (oneLocationWrong == 1) {
+                for (int i = oneNumberCorrectWrongLocationArray.length; i > 0; i--) {
+                    int digit = oneNumberCorrectWrongLocationArray[i - 1];
+                    oneNumberCorrectWrongLocation = oneNumberCorrectWrongLocation * 10 + digit;
+                }
+                return oneNumberCorrectWrongLocation;
+            }
+        }
+        return 0;
     }
 
     private static int getOneNumberCorrectInRightLocation(int computerNumber) {
@@ -72,7 +117,7 @@ public class Main {
         int randomNumber = random.nextInt(10);
 
         while (numbersNotExist < 100) {
-            if (digits[randomNumber] == false) {
+            if (!digits[randomNumber]) {
                 numbersNotExist = numbersNotExist * 10 + randomNumber;
                 digits[randomNumber] = true;
             }
@@ -102,7 +147,7 @@ public class Main {
 
             int digit = computerNumber % 10;
 
-            if (digits[digit] == true) {
+            if (digits[digit]) {
                 return true;
             }
             digits[digit] = true;
