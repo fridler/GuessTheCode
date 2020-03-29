@@ -1,5 +1,6 @@
 package com.yair.guessthecode;
 
+import javax.swing.*;
 import java.util.Random;
 
 public class Main {
@@ -8,14 +9,87 @@ public class Main {
 
         int computerNumber = generateComputerNumber();
         int numbersNotExist = getNumbersNotExist(computerNumber);
-        int oneNumberCorrectInRightLocation = getOneNumberCorrectInRightLocation(computerNumber);
+        int oneNumberCorrectInRightLocation1 = getOneNumberCorrectInRightLocation(computerNumber);
+        int oneNumberCorrectInRightLocation2 = getOneNumberCorrectInRightLocation(computerNumber);
+        while (oneNumberCorrectInRightLocation1 == oneNumberCorrectInRightLocation2){
+            oneNumberCorrectInRightLocation2 = getOneNumberCorrectInRightLocation(computerNumber);
+        }
         int oneNumberCorrectAtWrongLocation = getOneNumberCorrectAtWrongLocation(computerNumber);
+        int twoNumberCorrectAtWrongLocation = getTwoNumberCorrectAtWrongLocation(computerNumber);
+
+        System.out.println("The number generated: " + computerNumber);
+
+        boolean isUserWon = false;
+        int attemptAmount = 0;
+
+        while (!isUserWon) {
+            String text = JOptionPane.showInputDialog(null, "Please try to guess the code:" +
+                    "\nOnly one number is correct and in the right location: " + oneNumberCorrectInRightLocation1 +
+                    "\nOnly one number is correct and in wrong location: " + oneNumberCorrectAtWrongLocation +
+                    "\nOnly two number is correct and in wrong location: " + twoNumberCorrectAtWrongLocation +
+                    "\nNumbers are not Exist: " + numbersNotExist +
+                    "\nOnly one number is correct and in the right location: " + oneNumberCorrectInRightLocation2,
+                    "Created by Fridler", JOptionPane.QUESTION_MESSAGE);
+
+            int userGuess = Integer.parseInt(text);
+            if (userGuess == computerNumber) {
+                isUserWon = true;
+            }
+            attemptAmount++;
+        }
+
+        JOptionPane.showMessageDialog(null,"You succeeded after " + attemptAmount + " attempts","Created by Fridler", JOptionPane.INFORMATION_MESSAGE);
 
         // test
         System.out.println("The number generated: " + computerNumber);
         System.out.println("No number exists: " + numbersNotExist);
-        System.out.println("One number correct and in the right location: " + oneNumberCorrectInRightLocation);
+        System.out.println("One number correct and in the right location: " + oneNumberCorrectInRightLocation1);
+        System.out.println("One number correct and in the right location: " + oneNumberCorrectInRightLocation2);
         System.out.println("One number correct and wrong location: " + oneNumberCorrectAtWrongLocation);
+        System.out.println("Two number correct and wrong location: " + twoNumberCorrectAtWrongLocation);
+    }
+
+    private static int getTwoNumberCorrectAtWrongLocation(int computerNumber) {
+        int twoLocationWrong = 0;
+        while (twoLocationWrong != 2) {
+
+            twoLocationWrong = 0;
+            int twoNumberCorrectWrongLocation = generateComputerNumber();
+            int tempComputerNumber = computerNumber;
+
+
+            int[] twoNumberCorrectWrongLocationArray = new int[3];
+            int[] tempComputerNumberArray = new int[3];
+
+            for (int i = 0; i < twoNumberCorrectWrongLocationArray.length; i++) {
+                int digit = twoNumberCorrectWrongLocation % 10;
+                twoNumberCorrectWrongLocationArray[i] = digit;
+                twoNumberCorrectWrongLocation /= 10;
+            }
+
+            for (int i = 0; i < tempComputerNumberArray.length; i++) {
+                int digit = tempComputerNumber % 10;
+                tempComputerNumberArray[i] = digit;
+                tempComputerNumber /= 10;
+            }
+
+            for (int i = 0; i < twoNumberCorrectWrongLocationArray.length; i++) {
+                for (int j = 0; j < tempComputerNumberArray.length; j++) {
+                    if (twoNumberCorrectWrongLocationArray[i] == tempComputerNumberArray[j] && i != j) {
+                        twoLocationWrong++;
+                    }
+                }
+
+            }
+            if (twoLocationWrong == 2) {
+                for (int i = twoNumberCorrectWrongLocationArray.length; i > 0; i--) {
+                    int digit = twoNumberCorrectWrongLocationArray[i - 1];
+                    twoNumberCorrectWrongLocation = twoNumberCorrectWrongLocation * 10 + digit;
+                }
+                return twoNumberCorrectWrongLocation;
+            }
+        }
+        return 0;
     }
 
     private static int getOneNumberCorrectAtWrongLocation(int computerNumber) {
