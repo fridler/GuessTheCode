@@ -178,14 +178,6 @@ public class Main {
                 }
             }
 
-//            for (int i = 0; i < newNumberArray.length; i++) {
-//                for (int j = 0; j < tempComputerNumberArray.length; j++) {
-//                    if (newNumberArray[i] == tempComputerNumberArray[j]) {
-//                        numbersOverlapInBothArrays++;
-//                    }
-//                }
-//
-//            }
             for (int i = 0; i < newNumberArray.length; i++) {
                 if (newNumberArray[i] == tempComputerNumberArray[i]) {
                     numbersOverlapInBothArrays++;
