@@ -8,63 +8,108 @@ public class Main {
     public static void main(String[] args) {
 
         int computerNumber = generateComputerNumber();
-        int numbersNotExist = getNumbersNotExist(computerNumber);
-        int oneNumberCorrectInRightLocation1 = getOneNumberCorrectInRightLocation(computerNumber);
-        int oneNumberCorrectInRightLocation2 = getOneNumberCorrectInRightLocation(computerNumber);
-        while (oneNumberCorrectInRightLocation1 == oneNumberCorrectInRightLocation2){
-            oneNumberCorrectInRightLocation2 = getOneNumberCorrectInRightLocation(computerNumber);
+        int numbersAreNotExist = getNumbersAreNotExist(computerNumber);
+        int oneNumberAndPositionAreCorrect1 = getNumberAndPositionAreCorrect(computerNumber, 1);
+        int oneNumberAndPositionAreCorrect2 = getNumberAndPositionAreCorrect(computerNumber, 1);
+        while (oneNumberAndPositionAreCorrect1 == oneNumberAndPositionAreCorrect2) {
+            oneNumberAndPositionAreCorrect2 = getNumberAndPositionAreCorrect(computerNumber, 1);
         }
-        int oneNumberCorrectAtWrongLocation = getOneNumberCorrectAtWrongLocation(computerNumber);
-        int twoNumberCorrectAtWrongLocation = getTwoNumberCorrectAtWrongLocation(computerNumber);
+        int oneNumberIsCorrectAndLocationIncorrect = getNumberIsCorrectAndLocationIncorrect(computerNumber, 1);
+        int twoNumberIsCorrectAndLocationIncorrect1 = getNumberIsCorrectAndLocationIncorrect(computerNumber, 2);
+        int twoNumberIsCorrectAndLocationIncorrect2 = getNumberIsCorrectAndLocationIncorrect(computerNumber, 2);
+        int twoNumberAndPositionAreCorrect = getNumberAndPositionAreCorrect(computerNumber, 2);
 
         System.out.println("The number generated: " + computerNumber);
 
         boolean isUserWon = false;
         int attemptAmount = 0;
+        int difficultLevel = getDifficultLevel();
 
         while (!isUserWon) {
-            String text = JOptionPane.showInputDialog(null, "Please try to guess the code:" +
-                    "\nOnly one number is correct and in the right location: " + oneNumberCorrectInRightLocation1 +
-                    "\nOnly one number is correct and in wrong location: " + oneNumberCorrectAtWrongLocation +
-                    "\nOnly two number is correct and in wrong location: " + twoNumberCorrectAtWrongLocation +
-                    "\nNumbers are not Exist: " + numbersNotExist +
-                    "\nOnly one number is correct and in the right location: " + oneNumberCorrectInRightLocation2,
+
+
+            String text = "Please try to guess the code:" +
+                    "\n\nOnly one number and position are correct: " + oneNumberAndPositionAreCorrect1 +
+                    "\nOnly one number is correct and location incorrect: " + oneNumberIsCorrectAndLocationIncorrect +
+                    "\nOnly two number is correct and location incorrect: " + twoNumberIsCorrectAndLocationIncorrect1 +
+                    "\nNumbers are not Exists: " + numbersAreNotExist +
+                    "\nOnly one number and position are correct: " + oneNumberAndPositionAreCorrect2 +
+                    "\nOnly one number is correct and location incorrect: " + oneNumberIsCorrectAndLocationIncorrect;
+
+            if (difficultLevel == 1) {
+                text = text + "\nOnly two number and position are correct: " + twoNumberAndPositionAreCorrect +
+                        "\nOnly two number is correct and location incorrect: " + twoNumberIsCorrectAndLocationIncorrect2;
+            } else if (difficultLevel == 2) {
+                text = text + "\nOnly two number is correct and location incorrect: " + twoNumberAndPositionAreCorrect;
+            }
+
+            String str = JOptionPane.showInputDialog(null, text,
                     "Created by Fridler", JOptionPane.QUESTION_MESSAGE);
 
-            int userGuess = Integer.parseInt(text);
+            int userGuess = Integer.parseInt(str);
+
             if (userGuess == computerNumber) {
                 isUserWon = true;
             }
             attemptAmount++;
         }
 
-        JOptionPane.showMessageDialog(null,"You succeeded after " + attemptAmount + " attempts","Created by Fridler", JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(null, "You succeeded after " + attemptAmount + " attempts", "Created by Fridler", JOptionPane.INFORMATION_MESSAGE);
 
         // test
         System.out.println("The number generated: " + computerNumber);
-        System.out.println("No number exists: " + numbersNotExist);
-        System.out.println("One number correct and in the right location: " + oneNumberCorrectInRightLocation1);
-        System.out.println("One number correct and in the right location: " + oneNumberCorrectInRightLocation2);
-        System.out.println("One number correct and wrong location: " + oneNumberCorrectAtWrongLocation);
-        System.out.println("Two number correct and wrong location: " + twoNumberCorrectAtWrongLocation);
+        System.out.println("No number exists: " + numbersAreNotExist);
+        System.out.println("Only one number correct and in the right location: " + oneNumberAndPositionAreCorrect1);
+        System.out.println("Only one number correct and in the right location: " + oneNumberAndPositionAreCorrect2);
+        System.out.println("Only one number correct and wrong location: " + oneNumberIsCorrectAndLocationIncorrect);
+        System.out.println("Only two number correct and wrong location: " + twoNumberIsCorrectAndLocationIncorrect1);
     }
 
-    private static int getTwoNumberCorrectAtWrongLocation(int computerNumber) {
-        int twoLocationWrong = 0;
-        while (twoLocationWrong != 2) {
+    private static int getDifficultLevel() {
 
-            twoLocationWrong = 0;
-            int twoNumberCorrectWrongLocation = generateComputerNumber();
+        String strDifficultChoice = JOptionPane.showInputDialog("Please choose a difficulty level:\n\n" +
+                "1. Easy \n" +
+                "2. Medium \n" +
+                "3. Hard");
+
+        int difficultChoice = Integer.parseInt(strDifficultChoice);
+
+        while (difficultChoice < 1 || difficultChoice > 3) {
+
+            JOptionPane.showMessageDialog(null, "Invalid number entered ! ! !\n\n"
+                    + "Your Choice must be between 1 and 3");
+
+            strDifficultChoice = JOptionPane.showInputDialog("Please choose a difficulty level:\n\n" +
+                    "1. Easy \n" +
+                    "2. Medium \n" +
+                    "3. Hard");
+
+            difficultChoice = Integer.parseInt(strDifficultChoice);
+        }
+        return difficultChoice;
+    }
+
+    private static int getNumberIsCorrectAndLocationIncorrect(int computerNumber,
+                                                              int amountOfNumberIsCorrectAndLocationIncorrect) {
+
+        int locationWrong = 0;
+        int locationCorrect = 0;
+
+        while (locationWrong != amountOfNumberIsCorrectAndLocationIncorrect || locationCorrect > 0) {
+
+            locationWrong = 0;
+            locationCorrect = 0;
+
+            int newNumber = generateComputerNumber();
             int tempComputerNumber = computerNumber;
 
-
-            int[] twoNumberCorrectWrongLocationArray = new int[3];
+            int[] newNumberArray = new int[3];
             int[] tempComputerNumberArray = new int[3];
 
-            for (int i = 0; i < twoNumberCorrectWrongLocationArray.length; i++) {
-                int digit = twoNumberCorrectWrongLocation % 10;
-                twoNumberCorrectWrongLocationArray[i] = digit;
-                twoNumberCorrectWrongLocation /= 10;
+            for (int i = 0; i < newNumberArray.length; i++) {
+                int digit = newNumber % 10;
+                newNumberArray[i] = digit;
+                newNumber /= 10;
             }
 
             for (int i = 0; i < tempComputerNumberArray.length; i++) {
@@ -73,41 +118,52 @@ public class Main {
                 tempComputerNumber /= 10;
             }
 
-            for (int i = 0; i < twoNumberCorrectWrongLocationArray.length; i++) {
+            for (int i = 0; i < newNumberArray.length; i++) {
                 for (int j = 0; j < tempComputerNumberArray.length; j++) {
-                    if (twoNumberCorrectWrongLocationArray[i] == tempComputerNumberArray[j] && i != j) {
-                        twoLocationWrong++;
+                    if (newNumberArray[i] == tempComputerNumberArray[j] && i != j) {
+                        locationWrong++;
                     }
                 }
 
             }
-            if (twoLocationWrong == 2) {
-                for (int i = twoNumberCorrectWrongLocationArray.length; i > 0; i--) {
-                    int digit = twoNumberCorrectWrongLocationArray[i - 1];
-                    twoNumberCorrectWrongLocation = twoNumberCorrectWrongLocation * 10 + digit;
+
+            for (int i = 0; i < newNumberArray.length; i++) {
+                if (newNumberArray[i] == tempComputerNumberArray[i]) {
+                    locationCorrect++;
                 }
-                return twoNumberCorrectWrongLocation;
+            }
+            if (locationWrong == amountOfNumberIsCorrectAndLocationIncorrect && locationCorrect == 0) {
+                for (int i = newNumberArray.length; i > 0; i--) {
+                    int digit = newNumberArray[i - 1];
+                    newNumber = newNumber * 10 + digit;
+                }
+                return newNumber;
             }
         }
         return 0;
     }
 
-    private static int getOneNumberCorrectAtWrongLocation(int computerNumber) {
-        int oneLocationWrong = 0;
-        while (oneLocationWrong != 1) {
+    private static int getNumberAndPositionAreCorrect(int computerNumber,
+                                                      int amountOfNumbersAndPositionsAreCorrect) {
 
-            oneLocationWrong = 0;
-            int oneNumberCorrectWrongLocation = generateComputerNumber();
+        int locationCorrect = 0;
+        int numbersOverlapInBothArrays = 0;
+
+        while (locationCorrect != amountOfNumbersAndPositionsAreCorrect || locationCorrect != numbersOverlapInBothArrays) {
+
+            locationCorrect = 0;
+            numbersOverlapInBothArrays = 0;
+
+            int newNumber = generateComputerNumber();
             int tempComputerNumber = computerNumber;
 
-
-            int[] oneNumberCorrectWrongLocationArray = new int[3];
+            int[] newNumberArray = new int[3];
             int[] tempComputerNumberArray = new int[3];
 
-            for (int i = 0; i < oneNumberCorrectWrongLocationArray.length; i++) {
-                int digit = oneNumberCorrectWrongLocation % 10;
-                oneNumberCorrectWrongLocationArray[i] = digit;
-                oneNumberCorrectWrongLocation /= 10;
+            for (int i = 0; i < newNumberArray.length; i++) {
+                int digit = newNumber % 10;
+                newNumberArray[i] = digit;
+                newNumber /= 10;
             }
 
             for (int i = 0; i < tempComputerNumberArray.length; i++) {
@@ -116,67 +172,39 @@ public class Main {
                 tempComputerNumber /= 10;
             }
 
-            for (int i = 0; i < oneNumberCorrectWrongLocationArray.length; i++) {
-                for (int j = 0; j < tempComputerNumberArray.length; j++) {
-                    if (oneNumberCorrectWrongLocationArray[i] == tempComputerNumberArray[j] && i != j) {
-                        oneLocationWrong++;
-                    }
+            for (int i = 0; i < newNumberArray.length; i++) {
+                if (newNumberArray[i] == tempComputerNumberArray[i]) {
+                    locationCorrect++;
                 }
-
             }
-            if (oneLocationWrong == 1) {
-                for (int i = oneNumberCorrectWrongLocationArray.length; i > 0; i--) {
-                    int digit = oneNumberCorrectWrongLocationArray[i - 1];
-                    oneNumberCorrectWrongLocation = oneNumberCorrectWrongLocation * 10 + digit;
+
+//            for (int i = 0; i < newNumberArray.length; i++) {
+//                for (int j = 0; j < tempComputerNumberArray.length; j++) {
+//                    if (newNumberArray[i] == tempComputerNumberArray[j]) {
+//                        numbersOverlapInBothArrays++;
+//                    }
+//                }
+//
+//            }
+            for (int i = 0; i < newNumberArray.length; i++) {
+                if (newNumberArray[i] == tempComputerNumberArray[i]) {
+                    numbersOverlapInBothArrays++;
                 }
-                return oneNumberCorrectWrongLocation;
+            }
+
+            if (locationCorrect == amountOfNumbersAndPositionsAreCorrect && locationCorrect == numbersOverlapInBothArrays) {
+                for (int i = newNumberArray.length; i > 0; i--) {
+                    int digit = newNumberArray[i - 1];
+                    newNumber = newNumber * 10 + digit;
+                }
+                return newNumber;
             }
         }
         return 0;
     }
 
-    private static int getOneNumberCorrectInRightLocation(int computerNumber) {
 
-        int oneLocationCorrect = 0;
-        while (oneLocationCorrect != 1) {
-
-            oneLocationCorrect = 0;
-            int oneNumberCorrectInRightLocation = generateComputerNumber();
-            int tempComputerNumber = computerNumber;
-
-
-            int[] oneNumberCorrectInRightLocationArray = new int[3];
-            int[] tempComputerNumberArray = new int[3];
-
-            for (int i = 0; i < oneNumberCorrectInRightLocationArray.length; i++) {
-                int digit = oneNumberCorrectInRightLocation % 10;
-                oneNumberCorrectInRightLocationArray[i] = digit;
-                oneNumberCorrectInRightLocation /= 10;
-            }
-
-            for (int i = 0; i < tempComputerNumberArray.length; i++) {
-                int digit = tempComputerNumber % 10;
-                tempComputerNumberArray[i] = digit;
-                tempComputerNumber /= 10;
-            }
-
-            for (int i = 0; i < oneNumberCorrectInRightLocationArray.length; i++) {
-                if (oneNumberCorrectInRightLocationArray[i] == tempComputerNumberArray[i]) {
-                    oneLocationCorrect++;
-                }
-            }
-            if (oneLocationCorrect == 1) {
-                for (int i = oneNumberCorrectInRightLocationArray.length; i > 0; i--) {
-                    int digit = oneNumberCorrectInRightLocationArray[i - 1];
-                    oneNumberCorrectInRightLocation = oneNumberCorrectInRightLocation * 10 + digit;
-                }
-                return oneNumberCorrectInRightLocation;
-            }
-        }
-        return 0;
-    }
-
-    private static int getNumbersNotExist(int computerNumber) {
+    private static int getNumbersAreNotExist(int computerNumber) {
 
         boolean[] digits = new boolean[10];
 
@@ -206,14 +234,14 @@ public class Main {
         Random random = new Random();
         int computerNumber = random.nextInt(900) + 100;
 
-        while (isDigitExistsTwice(computerNumber)) {
+        while (isDigitsExistsTwice(computerNumber)) {
             computerNumber = random.nextInt(900) + 100;
         }
 
         return computerNumber;
     }
 
-    private static boolean isDigitExistsTwice(int computerNumber) {
+    private static boolean isDigitsExistsTwice(int computerNumber) {
 
         boolean[] digits = new boolean[10];
 
